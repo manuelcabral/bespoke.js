@@ -4,6 +4,7 @@
 				slides = [].slice.call(parent.children, 0),
 				activeSlide = slides[0],
 				deckListeners = {},
+				asyncTransitionFun = function(data, done)  { done(); },
 
 				activate = function(index) {
 					if (!slides[index]) {
@@ -15,17 +16,24 @@
 						index: slides.indexOf(activeSlide)
 					});
 
+					var oldSlide = activeSlide;
 					activeSlide = slides[index];
 
 					slides.map(deactivate);
 
-					fire(deckListeners, 'activate', {
-						slide: activeSlide,
-						index: index
-					});
+					var transitionFunData = {
+						oldSlide: oldSlide,
+						newSlide: activeSlide
+					};
+					asyncTransitionFun(transitionFunData, function() {
+						fire(deckListeners, 'activate', {
+							slide: activeSlide,
+							index: index
+						});
 
-					addClass(activeSlide, 'active');
-					removeClass(activeSlide, 'inactive');
+						addClass(activeSlide, 'active');
+						removeClass(activeSlide, 'inactive');
+					});
 				},
 
 				deactivate = function(slide, index) {
@@ -71,7 +79,8 @@
 					next: next,
 					prev: prev,
 					parent: parent,
-					slides: slides
+					slides: slides,
+					asyncTransition: function(f) { asyncTransitionFun = f; }
 				};
 
 			addClass(parent, 'parent');
@@ -192,7 +201,8 @@
 		vertical: bindPlugin('vertical'),
 		on: on.bind(null, bespokeListeners),
 		off: off.bind(null, bespokeListeners),
-		plugins: plugins
+		plugins: plugins,
+		asyncTransition: callOnAllInstances('asyncTransition')
 	};
 
 }('bespoke', this, document));
