@@ -1,5 +1,5 @@
 /*!
- * Bespoke.js v0.1.1
+ * Bespoke.js v0.1.1-modified
  *
  * Copyright 2013, Mark Dalgleish
  * This content is released under the MIT license
@@ -34,13 +34,16 @@
 						newSlide: activeSlide
 					};
 					asyncTransitionFun(transitionFunData, function() {
-						fire(deckListeners, 'activate', {
-							slide: activeSlide,
-							index: index
-						});
+						if(transitionFunData.newSlide === activeSlide) {
+							fire(deckListeners, 'activate', {
+								slide: activeSlide,
+								index: index
 
-						addClass(activeSlide, 'active');
-						removeClass(activeSlide, 'inactive');
+							});
+
+							addClass(activeSlide, 'active');
+							removeClass(activeSlide, 'inactive');
+						}
 					});
 				},
 

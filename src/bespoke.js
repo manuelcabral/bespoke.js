@@ -26,13 +26,16 @@
 						newSlide: activeSlide
 					};
 					asyncTransitionFun(transitionFunData, function() {
-						fire(deckListeners, 'activate', {
-							slide: activeSlide,
-							index: index
-						});
+						if(transitionFunData.newSlide === activeSlide) {
+							fire(deckListeners, 'activate', {
+								slide: activeSlide,
+								index: index
 
-						addClass(activeSlide, 'active');
-						removeClass(activeSlide, 'inactive');
+							});
+
+							addClass(activeSlide, 'active');
+							removeClass(activeSlide, 'inactive');
+						}
 					});
 				},
 
