@@ -1,4 +1,10 @@
-[![Build Status](https://secure.travis-ci.org/markdalgleish/bespoke.js.png)](http://travis-ci.org/markdalgleish/bespoke.js)
+Adds a function to perform transition between slides asynchronously
+
+    bespoke.horizontal.from('#slides');
+    bespoke.asyncTransition(function(data, done) {
+      setTimeout(done, 3000);
+    });
+
 
 # Bespoke.js
 
